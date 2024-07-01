@@ -1,9 +1,10 @@
 package it.ITSincom.WebDev.persistance.repository;
 
+import io.agroal.api.AgroalDataSource;
+import io.quarkus.agroal.DataSource;
 import it.ITSincom.WebDev.persistance.model.Utente;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,9 +13,9 @@ import java.util.Optional;
 @ApplicationScoped
 public class UtenteRepository {
 
-    private final DataSource dataSource;
+    private final AgroalDataSource dataSource;
 
-    public UtenteRepository(DataSource dataSource) {
+    public UtenteRepository(@DataSource("db1") AgroalDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
