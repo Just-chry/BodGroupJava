@@ -24,7 +24,7 @@ public class PartnerRepository {
     public List<Partner> findAll() {
         List<Partner> partners = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT PartnerCode, PartnerName, ContractCode, ContractDescription, ContractStart, ContractEnd, FinalPriceExcludingVAT, ProductCode, ProductName, Time FROM PartnerContracts")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT TOP 10 PartnerCode, PartnerName, ContractCode, ContractDescription, ContractStart, ContractEnd, FinalPriceExcludingVAT, ProductCode, ProductName, Time FROM PartnerContracts")) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         Partner partner = new Partner();
