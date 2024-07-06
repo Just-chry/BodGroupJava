@@ -17,4 +17,8 @@ public class PartnerService {
     public List<Partner> getAllPartners() {
         return partnerRepository.findAll();
     }
+
+    public List<Partner> getPartnersByName(String name) {
+        return partnerRepository.findByName(name);
+    }
 }

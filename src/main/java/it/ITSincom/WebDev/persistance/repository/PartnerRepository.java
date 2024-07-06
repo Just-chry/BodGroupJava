@@ -24,7 +24,7 @@ public class PartnerRepository {
     public List<Partner> findAll() {
         List<Partner> partners = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("SELECT TOP 10 PartnerCode, PartnerName, ContractCode, ContractDescription, ContractStart, ContractEnd, FinalPriceExcludingVAT, ProductCode, ProductName, Time FROM PartnerContracts")) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT TOP 10 * FROM PartnerContracts")) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         Partner partner = new Partner();
@@ -48,4 +48,31 @@ public class PartnerRepository {
         }
     }
 
+    public List<Partner> findByName(String name) {
+        List<Partner> partners = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM PartnerContracts WHERE PartnerName = ?")) {
+                statement.setString(1, name);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        Partner partner = new Partner();
+                        partner.setPartnerCode(resultSet.getString("PartnerCode"));
+                        partner.setPartnerName(resultSet.getString("PartnerName"));
+                        partner.setContractCode(resultSet.getString("ContractCode"));
+                        partner.setContractDescription(resultSet.getString("ContractDescription"));
+                        partner.setContractStart(resultSet.getDate("ContractStart").toLocalDate());
+                        partner.setContractEnd(resultSet.getDate("ContractEnd").toLocalDate());
+                        partner.setFinalPriceExcludingVAT(resultSet.getDouble("FinalPriceExcludingVAT"));
+                        partner.setProductCode(resultSet.getString("ProductCode"));
+                        partner.setProductName(resultSet.getString("ProductName"));
+                        partner.setTime(resultSet.getDate("Time").toLocalDate());
+                        partners.add(partner);
+                    }
+                    return partners;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
